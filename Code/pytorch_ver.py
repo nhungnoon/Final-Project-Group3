@@ -175,24 +175,6 @@ for epoch in range(N_EPOCHS):
 # Testing
 
 
-DIR = "/home/ubuntu/gpu_noon/"
-valid_file = ['.jpeg']
-testing_imgs = []
-
-def create_input_data():
-    for img in os.listdir(DIR):
-
-        # input images
-        ext = os.path.splitext(img)[1]
-        if ext.lower() in valid_file:
-            img = cv2.imread(os.path.join(DIR, img), cv2.IMREAD_GRAYSCALE)
-            # Resize the image to be a rectangle
-            img_resize = cv2.resize(img, (28, 28))
-            testing_imgs.append(img_resize)
-
-# call the function
-#create_input_data()
-
 def predict(x):
     images = []
     for img_path in x:
@@ -216,12 +198,3 @@ self_create_imgs = ['/home/ubuntu/gpu_noon/letter_h.jpeg', '/home/ubuntu/gpu_noo
 '/home/ubuntu/gpu_noon/letter_y.jpeg']
 self_pred = predict(self_create_imgs)
 print(self_pred)
-
-
-
-
-#testing_image = Variable(torch.FloatTensor(testing_imgs), requires_grad = True).view(len(testing_imgs), 1,28,28)
-
-#test_output = model(testing_image)
-#_, predicted_test = torch.max(test_output.data, 1)
-#print(predicted_test)
