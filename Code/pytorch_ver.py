@@ -63,7 +63,8 @@ test_imgs = np.expand_dims(test_imgs, axis=-1)
 # get the labels from the first column
 test_labels = test.iloc[:, :1].values
 
-x_train, x_test2, y_train, y_test2 = train_test_split(train_imgs, train_labels, test_size=0.30, random_state=0)
+#x_train, x_test2, y_train, y_test2 = train_test_split(train_imgs, train_labels, test_size=0.30, random_state=0)
+x_train, x_test2, y_train, y_test2 = train_test_split(train_imgs, train_labels, stratify=train_labels, test_size=0.30, random_state=0)
 
 
 x_train1 = Variable(torch.FloatTensor(x_train), requires_grad = True).view(len(x_train), 1,28,28)
