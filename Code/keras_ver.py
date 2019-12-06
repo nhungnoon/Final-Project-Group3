@@ -101,9 +101,59 @@ model.compile(optimizer=Adam(learning_rate), loss=categorical_crossentropy, metr
 
 
 # using fit_generator for model
-model.fit_generator(img_aug.flow(x_train, y_train, batch_size=200),
+fit_model = model.fit_generator(img_aug.flow(x_train, y_train, batch_size=200),
 	validation_data=(x_test2, y_test2), steps_per_epoch=len(x_train) // 200, epochs=n_epochs,
 	 verbose=1, shuffle=True, callbacks=[model_c])
 
 
-print("Final accuracy on validations set:", 100*model.evaluate(test_imgs, test_labels)[1], "%")
+# summarize history for loss
+plt.plot(fit_model.history['loss'])
+plt.plot(fit_model.history['val_loss'])
+plt.title('Keras model loss')
+plt.ylabel('loss')
+plt.xlabel('epoch')
+plt.legend(['train', 'test'], loc='upper left')
+plt.show()
+
+
+# print("Final accuracy on validations set:", 100*model.evaluate(test_imgs, test_labels)[1], "%")
+
+print("Final accuracy on test set:", 100*model.evaluate(test_imgs, test_labels)[1], "%")
+
+
+def predict(x):
+    # Here x is a NumPy array. On the actual exam it will be a list of paths.
+
+    # assuming x is has multiples path like /home/ubuntu/noon_cpu/train/cell_0.jpg
+
+    # create empty images file
+    images = []
+
+    # for loop for images path
+    for img_path in x:
+        # read in images in color
+        img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
+        # Resize the image to be a rectangle: increase the size from previous version
+        img = cv2.resize(img, (28, 28))
+        img = np.array(img)
+        img = np.expand_dims(img, axis=-1)
+        # append to the images
+        images.append(img)
+
+    # turn the images list into array
+    x = np.array(images)
+
+    # load the model
+    model = load_model('model_group3.hdf5')
+    # calculate prediction
+    y_pred = np.argmax(model.predict(x), axis=1)
+    return y_pred
+
+self_create_imgs = ['/home/ubuntu/gpu_noon/letter_h.jpeg', '/home/ubuntu/gpu_noon/letter_a.jpeg', '/home/ubuntu/gpu_noon/letter_p.jpeg',
+'/home/ubuntu/gpu_noon/letter_p.jpeg','/home/ubuntu/gpu_noon/letter_y.jpeg', '/home/ubuntu/gpu_noon/letter_h.jpeg',
+'/home/ubuntu/gpu_noon/letter_o.jpeg', '/home/ubuntu/gpu_noon/letter_l.jpeg',
+'/home/ubuntu/gpu_noon/letter_i.jpeg','/home/ubuntu/gpu_noon/letter_d.jpeg', '/home/ubuntu/gpu_noon/letter_a.jpeg',
+'/home/ubuntu/gpu_noon/letter_y.jpeg']
+self_pred = predict(self_create_imgs)
+
+print(self_pred)
