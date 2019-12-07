@@ -17,7 +17,11 @@ from keras.models import Sequential
 from keras.initializers import glorot_uniform
 from keras.callbacks import ModelCheckpoint
 from keras.utils import to_categorical
+import os
 
+
+# Retrieve the data
+os.system("wget https://dataml2.s3.amazonaws.com/sign_mnist_train.csv")
 
 # set seed and the initial weight 
 SEED = 42
@@ -121,39 +125,3 @@ plt.show()
 print("Final accuracy on test set:", 100*model.evaluate(test_imgs, test_labels)[1], "%")
 
 
-def predict(x):
-    # Here x is a NumPy array. On the actual exam it will be a list of paths.
-
-    # assuming x is has multiples path like /home/ubuntu/noon_cpu/train/cell_0.jpg
-
-    # create empty images file
-    images = []
-
-    # for loop for images path
-    for img_path in x:
-        # read in images in color
-        img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
-        # Resize the image to be a rectangle: increase the size from previous version
-        img = cv2.resize(img, (28, 28))
-        img = np.array(img)
-        img = np.expand_dims(img, axis=-1)
-        # append to the images
-        images.append(img)
-
-    # turn the images list into array
-    x = np.array(images)
-
-    # load the model
-    model = load_model('model_group3.hdf5')
-    # calculate prediction
-    y_pred = np.argmax(model.predict(x), axis=1)
-    return y_pred
-
-self_create_imgs = ['/home/ubuntu/gpu_noon/letter_h.jpeg', '/home/ubuntu/gpu_noon/letter_a.jpeg', '/home/ubuntu/gpu_noon/letter_p.jpeg',
-'/home/ubuntu/gpu_noon/letter_p.jpeg','/home/ubuntu/gpu_noon/letter_y.jpeg', '/home/ubuntu/gpu_noon/letter_h.jpeg',
-'/home/ubuntu/gpu_noon/letter_o.jpeg', '/home/ubuntu/gpu_noon/letter_l.jpeg',
-'/home/ubuntu/gpu_noon/letter_i.jpeg','/home/ubuntu/gpu_noon/letter_d.jpeg', '/home/ubuntu/gpu_noon/letter_a.jpeg',
-'/home/ubuntu/gpu_noon/letter_y.jpeg']
-self_pred = predict(self_create_imgs)
-
-print(self_pred)
