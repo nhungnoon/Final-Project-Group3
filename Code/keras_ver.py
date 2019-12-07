@@ -20,13 +20,16 @@ from keras.utils import to_categorical
 import os
 
 
-# Retrieve the data
+# Retrieve the train and test data
 os.system("wget https://dataml2.s3.amazonaws.com/sign_mnist_train.csv")
+os.system("wget https://dataml2.s3.amazonaws.com/sign_mnist_test.csv")
 
+# %% --------------------------------------- Set-Up --------------------------------------------------------------------
 # set seed and the initial weight 
 SEED = 42
 weight_init = glorot_uniform(seed=SEED)
 
+# %% --------------------------------------- Data --------------------------------------------------------------------
 # load the data 
 train = pd.read_csv('sign_mnist_train.csv')
 test = pd.read_csv('sign_mnist_test.csv')
@@ -51,12 +54,15 @@ train_labels, test_labels = to_categorical(train_labels, num_classes=25), to_cat
 # split train set into train and validation set
 x_train, x_test2, y_train, y_test2 = train_test_split(train_imgs, train_labels, test_size=0.30)
 
+# %% ----------------------------------- Hyper Parameters --------------------------------------------------------------
 
 # define number of classes, learning rate, image shape, and number of epochs
 n_classes = 25
 learning_rate = 0.001
 image_shape = (28, 28, 1)
 n_epochs = 20
+
+# %% ----------------------------------- Model Set-up --------------------------------------------------------------
 
 # initilize a model
 model = Sequential()
@@ -90,7 +96,8 @@ model.add(Dropout(0.3))
 # last layer
 model.add(Dense(n_classes, activation='softmax'))
 
-# Training the model
+# %% ----------------------------------- Train Model --------------------------------------------------------------
+
 
 # create checkpoint and choose to save the best model
 model_c = ModelCheckpoint('model_group3.hdf5', monitor='val_loss', mode='auto', verbose=1, save_best_only=True)
@@ -109,6 +116,7 @@ fit_model = model.fit_generator(img_aug.flow(x_train, y_train, batch_size=200),
 	validation_data=(x_test2, y_test2), steps_per_epoch=len(x_train) // 200, epochs=n_epochs,
 	 verbose=1, shuffle=True, callbacks=[model_c])
 
+# %% ----------------------------------- Visualize the loss for the model --------------------------------------------------------------
 
 # summarize history for loss
 plt.plot(fit_model.history['loss'])
@@ -116,12 +124,10 @@ plt.plot(fit_model.history['val_loss'])
 plt.title('Keras model loss')
 plt.ylabel('loss')
 plt.xlabel('epoch')
-plt.legend(['train', 'test'], loc='upper left')
+plt.legend(['train', 'valid'], loc='upper left')
 plt.show()
 
-
-# print("Final accuracy on validations set:", 100*model.evaluate(test_imgs, test_labels)[1], "%")
-
+# %% ----------------------------------- The Accuracy for Test set --------------------------------------------------------------
 print("Final accuracy on test set:", 100*model.evaluate(test_imgs, test_labels)[1], "%")
 
-
+# End
