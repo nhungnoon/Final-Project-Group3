@@ -128,7 +128,7 @@ print("Final accuracy on test set:", 100*model.evaluate(test_imgs, test_labels)[
 # summarize history for accuracy
 plt.plot(fit_model.history['categorical_accuracy'])
 plt.plot(fit_model.history['val_categorical_accuracy'])
-plt.title('Keras model loss')
+plt.title('Keras model accuracy')
 plt.ylabel('loss')
 plt.xlabel('epoch')
 plt.legend(['train', 'valid'], loc='upper left')
