@@ -27,6 +27,7 @@ os.system("wget https://dataml2.s3.amazonaws.com/sign_mnist_test.csv")
 # %% --------------------------------------- Set-Up --------------------------------------------------------------------
 # set seed and the initial weight 
 SEED = 42
+np.random.seed(SEED)
 weight_init = glorot_uniform(seed=SEED)
 
 # %% --------------------------------------- Data --------------------------------------------------------------------
