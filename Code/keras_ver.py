@@ -125,7 +125,7 @@ print("Final accuracy on test set:", 100*model.evaluate(test_imgs, test_labels)[
 
 
 # %% ----------------------------------- Visualize the loss for the model --------------------------------------------------------------
-# summarize history for loss
+# summarize history for accuracy
 plt.plot(fit_model.history['categorical_accuracy'])
 plt.plot(fit_model.history['val_categorical_accuracy'])
 plt.title('Keras model loss')
