@@ -18,6 +18,9 @@ from keras.initializers import glorot_uniform
 from keras.callbacks import ModelCheckpoint
 from keras.utils import to_categorical
 import os
+import matplotlib
+import matplotlib.pyplot as plt
+matplotlib.use('TkAgg')
 
 
 # Retrieve the train and test data
@@ -117,7 +120,19 @@ fit_model = model.fit_generator(img_aug.flow(x_train, y_train, batch_size=200),
 	validation_data=(x_test2, y_test2), steps_per_epoch=len(x_train) // 200, epochs=n_epochs,
 	 verbose=1, shuffle=True, callbacks=[model_c])
 
+# %% ----------------------------------- The Accuracy for Test set --------------------------------------------------------------
+print("Final accuracy on test set:", 100*model.evaluate(test_imgs, test_labels)[1], "%")
+
+
 # %% ----------------------------------- Visualize the loss for the model --------------------------------------------------------------
+# summarize history for loss
+plt.plot(fit_model.history['categorical_accuracy'])
+plt.plot(fit_model.history['val_categorical_accuracy'])
+plt.title('Keras model loss')
+plt.ylabel('loss')
+plt.xlabel('epoch')
+plt.legend(['train', 'valid'], loc='upper left')
+plt.show()
 
 # summarize history for loss
 plt.plot(fit_model.history['loss'])
@@ -128,7 +143,5 @@ plt.xlabel('epoch')
 plt.legend(['train', 'valid'], loc='upper left')
 plt.show()
 
-# %% ----------------------------------- The Accuracy for Test set --------------------------------------------------------------
-print("Final accuracy on test set:", 100*model.evaluate(test_imgs, test_labels)[1], "%")
 
 # End
