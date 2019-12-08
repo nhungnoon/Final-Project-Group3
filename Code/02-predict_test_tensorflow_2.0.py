@@ -15,7 +15,7 @@ tf.random.set_seed(42)
 np.random.seed(42)
 
 # data prep
-os.system("wget https://dataml2.s3.amazonaws.com/sign_mnist_test.csv")
+# os.system("wget https://dataml2.s3.amazonaws.com/sign_mnist_test.csv")
 test = pd.read_csv('sign_mnist_test.csv')
 
 labels = test['label'].values
@@ -32,13 +32,14 @@ class CNN(tf.keras.Model):
     super(CNN, self).__init__()
     self.conv1 = Conv2D(32, 3, activation='relu')
     self.convnorm1 = BatchNormalization()
-    self.pool1 = MaxPool2D(pool_size = (2, 2), strides = (2,2))
+    self.pool1 = MaxPool2D(pool_size=(2, 2), strides=(2, 2))
 
-    self.conv2 = Conv2D(64, (2, 2), padding= 'same', strides=(1, 1), activation='relu')
+    self.conv2 = Conv2D(64, 2, strides=(1, 1), activation='relu')
     self.convnorm2 = BatchNormalization()
-    self.pool2 = MaxPool2D(pool_size = (2, 2), strides = (2,2))
+    self.pool2 = MaxPool2D(pool_size=(2, 2), strides=(2, 2))
 
     self.flatten = Flatten()
+    # self.drop = DROPOUT
     self.d1 = Dense(128, activation='relu')
     self.d2 = Dense(25, activation='softmax')
 
@@ -49,7 +50,7 @@ class CNN(tf.keras.Model):
     x = self.d1(x)
     return self.d2(x)
 
-# # metrics and such
+# metrics
 model = CNN()
 loss_ = SparseCategoricalCrossentropy()
 optimizer = Adam()
@@ -61,14 +62,14 @@ model.load_weights('model')
 
 @tf.function
 def test_step(images, labels):
-  predictions = model(images)
-  t_loss = loss_(labels, predictions)
+    predictions = model(images)
+    t_loss = loss_(labels, predictions)
 
-  test_loss(t_loss)
-  test_accuracy(labels, predictions)
+    test_loss(t_loss)
+    test_accuracy(labels, predictions)
 
 for test_images, test_labels in test_ds:
-  test_step(test_images, test_labels)
+    test_step(test_images, test_labels)
 
 to_print = 'Test Accuracy: {}'
 print(to_print.format(test_accuracy.result()*100))
