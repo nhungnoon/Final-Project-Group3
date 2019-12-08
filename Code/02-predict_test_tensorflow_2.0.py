@@ -15,7 +15,7 @@ tf.random.set_seed(42)
 np.random.seed(42)
 
 # data prep
-# os.system("wget https://dataml2.s3.amazonaws.com/sign_mnist_test.csv")
+os.system("wget https://dataml2.s3.amazonaws.com/sign_mnist_test.csv")
 test = pd.read_csv('sign_mnist_test.csv')
 
 labels = test['label'].values

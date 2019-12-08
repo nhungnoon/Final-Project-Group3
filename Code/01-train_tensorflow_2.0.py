@@ -16,7 +16,7 @@ np.random.seed(42)
 
 # DATA PREP
 # load data and split labels from the csv file
-# os.system("wget https://dataml2.s3.amazonaws.com/sign_mnist_train.csv")
+os.system("wget https://dataml2.s3.amazonaws.com/sign_mnist_train.csv")
 data = pd.read_csv('sign_mnist_train.csv')
 labels = data['label'].values
 data.drop('label', axis=1, inplace=True)
