@@ -20,7 +20,8 @@ from keras.utils import to_categorical
 import os
 import matplotlib
 import matplotlib.pyplot as plt
-matplotlib.use('TkAgg')
+# depend on the settings of your Pycharm, you might need to use the code line below for the plot to show
+# matplotlib.use('TkAgg')
 
 
 # Retrieve the train and test data
